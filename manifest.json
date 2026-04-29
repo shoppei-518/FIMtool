@@ -1,0 +1,16 @@
+{
+  "name": "FIM採点支援ツール",
+  "short_name": "FIM採点",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#F0FDF4",
+  "theme_color": "#15803D",
+  "icons": [
+    {
+      "src": "icon-512.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
