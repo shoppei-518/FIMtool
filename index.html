@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#15803D">
 <link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj4KPHJlY3Qgd2lkdGg9IjUxMiIgaGVpZ2h0PSI1MTIiIHJ4PSIxMTAiIGZpbGw9IiNGMEZERjQiLz4KPHJlY3Qgd2lkdGg9IjUxMiIgaGVpZ2h0PSI1MTIiIHJ4PSIxMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzE2QTM0QSIgc3Ryb2tlLXdpZHRoPSIxNCIvPgo8dGV4dCB4PSIyNTYiIHk9IjIyMCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9IlNlZ29lIFVJLHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTcwIiBmb250LXdlaWdodD0iNzAwIiBmaWxsPSIjMTU4MDNEIj5GSU08L3RleHQ+CjxyZWN0IHg9IjExMCIgeT0iMjgwIiB3aWR0aD0iNDIiIGhlaWdodD0iMTIwIiByeD0iOCIgZmlsbD0iI0JCRjdEMCIvPgo8cmVjdCB4PSIxNjUiIHk9IjI1MCIgd2lkdGg9IjQyIiBoZWlnaHQ9IjE1MCIgcng9IjgiIGZpbGw9IiM4NkVGQUMiLz4KPHJlY3QgeD0iMjIwIiB5PSIyMjAiIHdpZHRoPSI0MiIgaGVpZ2h0PSIxODAiIHJ4PSI4IiBmaWxsPSIjNEFERTgwIi8+CjxyZWN0IHg9IjI3NSIgeT0iMjYwIiB3aWR0aD0iNDIiIGhlaWdodD0iMTQwIiByeD0iOCIgZmlsbD0iIzg2RUZBQyIvPgo8cmVjdCB4PSIzMzAiIHk9IjI5MCIgd2lkdGg9IjQyIiBoZWlnaHQ9IjExMCIgcng9IjgiIGZpbGw9IiNCQkY3RDAiLz4KPC9zdmc+">
-<title>FIM採点支援ツール v1.1.0</title>
+<title>FIM採点支援ツール v1.1.1</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Hiragino Sans','Meiryo','Yu Gothic',sans-serif;background:#F0F4F8;height:100vh;overflow:hidden}
@@ -57,7 +57,7 @@ input::placeholder{color:#AEB6BF}
 <div id="app">
 <div class="hd">
 <div class="b">v1.1</div>
-<div><div class="t">FIM採点支援ツール v1.1.0</div></div>
+<div><div class="t">FIM採点支援ツール v1.1.1</div></div>
 </div>
 <div class="tabs">
 <button class="a" onclick="sw('items')">📋 項目</button>
@@ -735,7 +735,7 @@ function begin(){st.idx=0;st.results=[];st.editing=-1;startItem();}
 function startItem(){st.trail=[];st.node=cfg.items[st.idx].node;renderNode();}
 function header(){
 var pct=Math.round(st.idx/cfg.items.length*100);
-var h='<div class="bar"><div class="fill" style="width:'+pct+'%"></div></div><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px"><span style="font-size:13px;font-weight:700;color:#15803D">'+cfg.title+'</span><span style="font-size:11px;color:#7F8C8D">項目 '+(st.idx+1)+' / '+cfg.items.length+'</span></div>';
+var h='<div class="bar"><div class="fill" style="width:'+pct+'%"></div></div><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px"><span style="font-size:13px;font-weight:700;color:#15803D">'+cfg.title+'</span><span style="display:flex;align-items:center;gap:8px"><span style="font-size:11px;color:#7F8C8D">項目 '+(st.idx+1)+' / '+cfg.items.length+'</span><button class="ibtn" style="padding:2px 8px;font-size:10px;border-color:#FADBD8;color:#922B21" onclick="'+cfg.g+'.confirmRestart()">↺ 最初から</button></span></div>';
 if(st.results.filter(Boolean).length>0){h+='<div class="vg" style="margin-bottom:10px">';st.results.forEach(function(r){if(!r)return;var s=SI[r.score];h+='<div style="display:flex;align-items:center;justify-content:space-between;font-size:12px;padding:3px 8px;border-radius:6px;background:'+s.bg+';color:'+s.tc+'"><span>'+esc(r.label)+'</span><span style="font-weight:700">'+r.score+'点</span></div>'});h+='</div>';}
 return h;}
 function renderNode(){
@@ -745,7 +745,7 @@ if(st.trail.length>0){st.trail.forEach(function(s,i){h+='<div class="step"><div 
 h+='<div style="background:#fff;border-radius:12px;padding:14px;box-shadow:0 1px 3px rgba(0,0,0,.06);margin-top:8px"><div class="step" style="margin-bottom:8px"><div class="dot c">'+(st.trail.length+1)+'</div><span style="font-size:14px;font-weight:600;color:#2C3E50">'+esc(st.node.q)+'</span></div>';
 if(st.node.sub)h+='<p style="font-size:11px;color:#7F8C8D;margin:0 0 10px 30px">'+esc(st.node.sub)+'</p>';
 h+='<div class="vg">';st.node.opts.forEach(function(o,i){h+='<button class="obtn" onclick="'+cfg.g+'.pick('+i+')">'+esc(o.t)+'</button>'});h+='</div></div>';
-h+='<div style="display:flex;gap:8px;margin-top:10px"><button class="ibtn" style="flex:1;border-color:#D5DBDB;color:#7F8C8D" onclick="'+cfg.g+'.restartItem()">↺ この項目をやり直す</button><button class="ibtn" style="flex:1;border-color:#D5DBDB;color:#7F8C8D" onclick="'+cfg.g+'.intro()">■ 最初から</button></div>';
+h+='<div style="margin-top:10px"><button class="ibtn" style="width:100%;border-color:#D5DBDB;color:#7F8C8D" onclick="'+cfg.g+'.restartItem()">↺ この項目をやり直す</button></div>';
 div.innerHTML=h;}
 function pick(i){var o=st.node.opts[i];st.trail.push(o.t);if(o.next.score!==undefined){result(o.next);}else{st.node=o.next;renderNode();}}
 function result(r){
@@ -771,9 +771,10 @@ cfg.items.forEach(function(it,i){var r=st.results[i];
 if(r){var s=SI[r.score];h+='<div style="display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:8px;background:'+s.bg+'"><span style="min-width:18px;font-size:11px;color:'+s.tc+'">'+(i+1)+'</span><span style="flex:1;font-size:13px;color:'+s.tc+'">'+esc(r.label)+'</span><span style="font-size:16px;font-weight:700;color:'+s.tc+'">'+r.score+'</span><button class="ibtn" style="padding:3px 8px;font-size:10px;border-color:'+s.tc+';color:'+s.tc+';background:transparent" onclick="'+cfg.g+'.editItem('+i+')">修正</button></div>';}
 else{h+='<div style="display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:8px;background:#F4F6F7"><span style="min-width:18px;font-size:11px;color:#AEB6BF">'+(i+1)+'</span><span style="flex:1;font-size:13px;color:#AEB6BF">'+esc(it.label)+'</span><button class="ibtn" style="padding:3px 8px;font-size:10px" onclick="'+cfg.g+'.editItem('+i+')">採点</button></div>';}});
 h+='</div><div style="background:#fff;border-radius:12px;padding:14px;box-shadow:0 1px 3px rgba(0,0,0,.06);margin-bottom:12px"><div style="display:flex;justify-content:space-between;font-size:13px;color:#5D6D7E;margin-bottom:6px"><span>運動項目合計（'+nm+'項目）</span><span style="font-weight:700;color:#15803D">'+mot+' 点</span></div><div style="font-size:11px;color:#7D6608;background:#FEF9E7;border:1px solid #F9E79F;border-radius:6px;padding:7px 9px;margin:2px 0 8px;line-height:1.5">FIM 運動項目21点以上55点以下または 高次脳機能障害・脊髄損傷が重症の基準です</div>'+(cfg.judge?judgeLine:'')+'<div style="display:flex;justify-content:space-between;font-size:13px;color:#5D6D7E;margin-bottom:6px"><span>認知項目合計（'+nc+'項目）</span><span style="font-weight:700;color:#6C3483">'+cog+' 点</span></div><div style="display:flex;justify-content:space-between;font-size:15px;border-top:1px solid #E5E8EB;padding-top:8px"><span style="font-weight:700;color:#2C3E50">合計</span><span style="font-weight:700;color:#15803D">'+(mot+cog)+' 点</span></div></div>';
-h+='<button class="ibtn" style="width:100%;border-color:#FADBD8;color:#922B21" onclick="'+cfg.g+'.intro()">■ 最初からやり直す</button>';
+h+='<button class="ibtn" style="width:100%;border-color:#FADBD8;color:#922B21" onclick="'+cfg.g+'.confirmRestart()">■ 最初からやり直す</button>';
 div.innerHTML=h;}
-return {intro:intro,begin:begin,pick:pick,nextItem:nextItem,restartItem:restartItem,editItem:editItem};}
+function confirmRestart(){if(confirm("採点中の内容がすべて消えます。最初からやり直しますか？")){intro();}}
+return {intro:intro,begin:begin,pick:pick,nextItem:nextItem,restartItem:restartItem,editItem:editItem,confirmRestart:confirmRestart};}
 
 // FIM採点（全18項目: 運動13＋認知5）。運動合計21〜55点で該当/非該当を判定表示
 var FIM_ITEMS=[
@@ -800,6 +801,10 @@ var REHA=makeAssess({id:"p-reha",title:"🦿 5Aリハ",g:"REHA",items:REHA_ITEMS
 var KANGO=makeAssess({id:"p-kango",title:"🩺 5A看護",g:"KANGO",items:KANGO_ITEMS});
 var FIM=makeAssess({id:"p-fim",title:"📝 FIM採点",g:"FIM",items:FIM_ITEMS,judge:true});
 REHA.intro();KANGO.intro();FIM.intro();
+
+// 旧PWA版のService Worker/キャッシュを自動削除（古い版が表示され続ける問題の恒久対策）
+if('serviceWorker' in navigator&&navigator.serviceWorker.getRegistrations){navigator.serviceWorker.getRegistrations().then(function(rs){rs.forEach(function(r){r.unregister();});}).catch(function(){});}
+if(window.caches&&caches.keys){caches.keys().then(function(ks){ks.forEach(function(k){caches.delete(k);});}).catch(function(){});}
 </script>
 </body>
 </html>
