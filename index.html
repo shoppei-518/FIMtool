@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#15803D">
 <link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj4KPHJlY3Qgd2lkdGg9IjUxMiIgaGVpZ2h0PSI1MTIiIHJ4PSIxMTAiIGZpbGw9IiNGMEZERjQiLz4KPHJlY3Qgd2lkdGg9IjUxMiIgaGVpZ2h0PSI1MTIiIHJ4PSIxMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzE2QTM0QSIgc3Ryb2tlLXdpZHRoPSIxNCIvPgo8dGV4dCB4PSIyNTYiIHk9IjIyMCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9IlNlZ29lIFVJLHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTcwIiBmb250LXdlaWdodD0iNzAwIiBmaWxsPSIjMTU4MDNEIj5GSU08L3RleHQ+CjxyZWN0IHg9IjExMCIgeT0iMjgwIiB3aWR0aD0iNDIiIGhlaWdodD0iMTIwIiByeD0iOCIgZmlsbD0iI0JCRjdEMCIvPgo8cmVjdCB4PSIxNjUiIHk9IjI1MCIgd2lkdGg9IjQyIiBoZWlnaHQ9IjE1MCIgcng9IjgiIGZpbGw9IiM4NkVGQUMiLz4KPHJlY3QgeD0iMjIwIiB5PSIyMjAiIHdpZHRoPSI0MiIgaGVpZ2h0PSIxODAiIHJ4PSI4IiBmaWxsPSIjNEFERTgwIi8+CjxyZWN0IHg9IjI3NSIgeT0iMjYwIiB3aWR0aD0iNDIiIGhlaWdodD0iMTQwIiByeD0iOCIgZmlsbD0iIzg2RUZBQyIvPgo8cmVjdCB4PSIzMzAiIHk9IjI5MCIgd2lkdGg9IjQyIiBoZWlnaHQ9IjExMCIgcng9IjgiIGZpbGw9IiNCQkY3RDAiLz4KPC9zdmc+">
-<title>FIM採点支援ツール v1.1.3</title>
+<title>FIM採点支援ツール v1.1.4</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Hiragino Sans','Meiryo','Yu Gothic',sans-serif;background:#F0F4F8;height:100vh;overflow:hidden}
@@ -67,7 +67,7 @@ input::placeholder{color:#AEB6BF}
 <div id="app">
 <div class="hd">
 <div class="b">v1.1</div>
-<div><div class="t">FIM採点支援ツール v1.1.3</div></div>
+<div><div class="t">FIM採点支援ツール v1.1.4</div></div>
 </div>
 <div class="tabs">
 <button class="a" onclick="sw('items')">📋 項目</button>
@@ -793,13 +793,15 @@ function editItem(i){st.editing=i;st.idx=i;st.trail=[];st.nodeStack=[];st.node=c
 function renderSummary(){
 var mot=0,cog=0,nm=0,nc=0;
 st.results.forEach(function(r){if(!r)return;if(r.type==="認知"){cog+=r.score;nc++;}else{mot+=r.score;nm++;}});
-var inRange=(mot>=21&&mot<=55);
-var judgeLine=inRange?'<div style="font-size:13px;font-weight:700;color:#922B21;background:#FADBD8;border:1px solid #F1948A;border-radius:6px;padding:8px 10px;margin:0 0 8px">⚠️ 該当：重症の基準（運動21〜55点）に該当します（運動 '+mot+'点）</div>':'<div style="font-size:12px;color:#5D6D7E;background:#F4F6F7;border-radius:6px;padding:7px 9px;margin:0 0 8px">非該当（運動 '+mot+'点）　※高次脳機能障害・脊髄損傷が重症なら該当</div>';
+var total=mot+cog;
+var sevHtml=total<=20?'<div style="font-size:13px;font-weight:700;color:#7B241C;background:#F5B7B1;border:1px solid #CD6155;border-radius:6px;padding:8px 10px;margin:8px 0 0">▲ 超重症患者（総得点20点以下に該当・総得点 '+total+'点）</div>':(total<=55?'<div style="font-size:13px;font-weight:700;color:#922B21;background:#FADBD8;border:1px solid #F1948A;border-radius:6px;padding:8px 10px;margin:8px 0 0">▲ 重症患者（総得点21〜55点に該当・総得点 '+total+'点）</div>':'<div style="font-size:12px;color:#5D6D7E;background:#F4F6F7;border-radius:6px;padding:7px 9px;margin:8px 0 0">該当なし（総得点 '+total+'点）　※超重症=20点以下／重症=21〜55点</div>');
+var critNote='<div style="font-size:11px;color:#7D6608;background:#FEF9E7;border:1px solid #F9E79F;border-radius:6px;padding:7px 9px;margin:8px 0 0;line-height:1.5">総得点 20点以下＝超重症患者／21〜55点＝重症患者</div>';
+var refNote=cfg.judge?'':'<div style="font-size:10px;color:#AEB6BF;margin:4px 2px 0;line-height:1.5">※ 5Aリハ/5A看護は12/15項目の小計です。この基準は18項目FIM総得点用のため参考値です。</div>';
 var h='<p class="lb">'+cfg.title+'　採点結果</p><div class="vg" style="margin-bottom:14px">';
 cfg.items.forEach(function(it,i){var r=st.results[i];
 if(r){var s=SI[r.score];h+='<div style="display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:8px;background:'+s.bg+'"><span style="min-width:18px;font-size:11px;color:'+s.tc+'">'+(i+1)+'</span><span style="flex:1;font-size:13px;color:'+s.tc+'">'+esc(r.label)+'</span><span style="font-size:16px;font-weight:700;color:'+s.tc+'">'+r.score+'</span><button class="ibtn" style="padding:3px 8px;font-size:10px;border-color:'+s.tc+';color:'+s.tc+';background:transparent" onclick="'+cfg.g+'.editItem('+i+')">修正</button></div>';}
 else{h+='<div style="display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:8px;background:#F4F6F7"><span style="min-width:18px;font-size:11px;color:#AEB6BF">'+(i+1)+'</span><span style="flex:1;font-size:13px;color:#AEB6BF">'+esc(it.label)+'</span><button class="ibtn" style="padding:3px 8px;font-size:10px" onclick="'+cfg.g+'.editItem('+i+')">採点</button></div>';}});
-h+='</div><div style="background:#fff;border-radius:12px;padding:14px;box-shadow:0 1px 3px rgba(0,0,0,.06);margin-bottom:12px"><div style="display:flex;justify-content:space-between;font-size:13px;color:#5D6D7E;margin-bottom:6px"><span>運動項目合計（'+nm+'項目）</span><span style="font-weight:700;color:#15803D">'+mot+' 点</span></div><div style="font-size:11px;color:#7D6608;background:#FEF9E7;border:1px solid #F9E79F;border-radius:6px;padding:7px 9px;margin:2px 0 8px;line-height:1.5">FIM 運動項目21点以上55点以下または 高次脳機能障害・脊髄損傷が重症の基準です</div>'+(cfg.judge?judgeLine:'')+'<div style="display:flex;justify-content:space-between;font-size:13px;color:#5D6D7E;margin-bottom:6px"><span>認知項目合計（'+nc+'項目）</span><span style="font-weight:700;color:#6C3483">'+cog+' 点</span></div><div style="display:flex;justify-content:space-between;font-size:15px;border-top:1px solid #E5E8EB;padding-top:8px"><span style="font-weight:700;color:#2C3E50">合計</span><span style="font-weight:700;color:#15803D">'+(mot+cog)+' 点</span></div></div>';
+h+='</div><div style="background:#fff;border-radius:12px;padding:14px;box-shadow:0 1px 3px rgba(0,0,0,.06);margin-bottom:12px"><div style="display:flex;justify-content:space-between;font-size:13px;color:#5D6D7E;margin-bottom:6px"><span>運動項目合計（'+nm+'項目）</span><span style="font-weight:700;color:#15803D">'+mot+' 点</span></div><div style="display:flex;justify-content:space-between;font-size:13px;color:#5D6D7E;margin-bottom:6px"><span>認知項目合計（'+nc+'項目）</span><span style="font-weight:700;color:#6C3483">'+cog+' 点</span></div><div style="display:flex;justify-content:space-between;font-size:15px;border-top:1px solid #E5E8EB;padding-top:8px"><span style="font-weight:700;color:#2C3E50">合計</span><span style="font-weight:700;color:#15803D">'+total+' 点</span></div>'+sevHtml+critNote+refNote+'</div>';
 h+='<button class="ibtn" style="width:100%;border-color:#FADBD8;color:#922B21" onclick="'+cfg.g+'.confirmRestart()">■ 最初からやり直す</button>';
 div.innerHTML=h;}
 function confirmRestart(){if(confirm("採点中の内容がすべて消えます。最初からやり直しますか？")){intro();}}
